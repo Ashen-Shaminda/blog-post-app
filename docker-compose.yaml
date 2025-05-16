@@ -1,0 +1,21 @@
+services:
+   postgres:
+      image: postgres:latest
+      restart: always
+      container_name: blog
+      environment:
+         POSTGRES_DB: blog
+         POSTGRES_USER: root
+         POSTGRES_PASSWORD: changemeinprod
+      ports:
+         - "5432:5432"
+      volumes:
+         - postgres_data:/var/lib/postgresql/data
+   adminer:
+      image: adminer:latest
+      restart: always
+      ports:
+         -  8888:8080
+
+volumes:
+   postgres_data:
