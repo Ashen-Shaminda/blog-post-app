@@ -32,7 +32,7 @@ public class Post {
 
    @Column(nullable = false)
    @Enumerated(EnumType.STRING)
-   private PostStatus postStatus;
+   private PostStatus status;
 
    @Column(nullable = false)
    private Integer readingTime;
@@ -42,11 +42,11 @@ public class Post {
    private User author;
 
    @ManyToOne(fetch = FetchType.LAZY)
-   @JoinColumn(name="category_id", nullable = false)
+   @JoinColumn(name = "category_id", nullable = false)
    private Category category;
 
    @ManyToMany(fetch = FetchType.LAZY)
-   @JoinTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name =  "tag_id"))
+   @JoinTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
    private Set<Tag> tags = new HashSet<>();
 
    @Column(nullable = false)
@@ -59,12 +59,15 @@ public class Post {
    public boolean equals(Object o) {
       if (o == null || getClass() != o.getClass()) return false;
       Post post = (Post) o;
-      return Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(content, post.content) && postStatus == post.postStatus && Objects.equals(readingTime, post.readingTime) && Objects.equals(createdAt, post.createdAt) && Objects.equals(updatedAt, post.updatedAt);
+      return Objects.equals(id, post.id) && Objects.equals(title, post.title) &&
+              Objects.equals(content, post.content) && status == post.status &&
+              Objects.equals(readingTime, post.readingTime) && Objects.equals(createdAt, post.createdAt) &&
+              Objects.equals(updatedAt, post.updatedAt);
    }
 
    @Override
    public int hashCode() {
-      return Objects.hash(id, title, content, postStatus, readingTime, createdAt, updatedAt);
+      return Objects.hash(id, title, content, status, readingTime, createdAt, updatedAt);
    }
 
    @PrePersist

@@ -1,32 +1,34 @@
 package com.ashen_dissanayake.blog.mappers;
 
 import com.ashen_dissanayake.blog.domain.PostStatus;
-import com.ashen_dissanayake.blog.domain.dtos.CategoryDto;
-import com.ashen_dissanayake.blog.domain.dtos.CreateCategoryRequest;
-import com.ashen_dissanayake.blog.domain.entities.Category;
+import com.ashen_dissanayake.blog.domain.dtos.TagResponse;
 import com.ashen_dissanayake.blog.domain.entities.Post;
-import lombok.Builder;
+import com.ashen_dissanayake.blog.domain.entities.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface CategoryMapper {
+public interface TagMapper {
 
    @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatePostCount")
-   CategoryDto toDto(Category category);
+   TagResponse toTagResponse(Tag tag);
+
+   List<TagResponse> toTagResponseList(List<Tag> tags);
 
    @Named("calculatePostCount")
-   default long calculatePostCount(List<Post> posts) {
-      if(posts == null) return 0;
+   default Integer calculatePostCount(Set<Post> posts) {
+      if (posts == null) {
+         return 0;
+      }
 
-      return posts.stream()
+      return (int) posts
+              .stream()
               .filter(post -> PostStatus.PUBLISHED.equals(post.getStatus()))
               .count();
    }
-
-   Category toEntity(CreateCategoryRequest createCategoryRequest);
 }
