@@ -1,5 +1,6 @@
 package com.ashen_dissanayake.blog.handler;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -69,5 +70,16 @@ public class GlobalExceptionHandler {
       );
 
       return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+   }
+
+   @ExceptionHandler(EntityNotFoundException.class)
+   public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException ex, WebRequest request) {
+      ErrorResponse error = new ErrorResponse(
+              HttpStatus.NOT_FOUND.value(),
+              ex.getMessage(),
+              request.getDescription(false)
+      );
+
+      return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
    }
 }
