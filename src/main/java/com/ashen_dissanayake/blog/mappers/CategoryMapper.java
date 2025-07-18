@@ -5,7 +5,6 @@ import com.ashen_dissanayake.blog.domain.dtos.CategoryDto;
 import com.ashen_dissanayake.blog.domain.dtos.CreateCategoryRequest;
 import com.ashen_dissanayake.blog.domain.entities.Category;
 import com.ashen_dissanayake.blog.domain.entities.Post;
-import lombok.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -19,14 +18,15 @@ public interface CategoryMapper {
    @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatePostCount")
    CategoryDto toDto(Category category);
 
+   Category toEntity(CreateCategoryRequest createCategoryRequest);
+
    @Named("calculatePostCount")
    default long calculatePostCount(List<Post> posts) {
-      if(posts == null) return 0;
+      if (posts == null) return 0;
 
       return posts.stream()
               .filter(post -> PostStatus.PUBLISHED.equals(post.getStatus()))
               .count();
    }
 
-   Category toEntity(CreateCategoryRequest createCategoryRequest);
 }

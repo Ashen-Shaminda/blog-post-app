@@ -1,8 +1,21 @@
 services:
+   app:
+      build: .
+      restart: always
+      container_name: blog-app
+      depends_on:
+         - postgres
+      ports:
+         - "8080:8080"
+      environment:
+         SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/blog
+         SPRING_DATASOURCE_USERNAME: root
+         SPRING_DATASOURCE_PASSWORD: changemeinprod
+         SPRING_JPA_HIBERNATE_DDL_AUTO: update
    postgres:
       image: postgres:latest
       restart: always
-      container_name: blog
+      container_name: blog-db
       environment:
          POSTGRES_DB: blog
          POSTGRES_USER: root
